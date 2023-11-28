@@ -9,10 +9,12 @@ import Events from './pages/Events';
 import Offers from './pages/Offers';
 import Profile from './pages/Profile';
 import RoomsSuites from './pages/RoomsSuites';
+import Header from './components/Header';
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
