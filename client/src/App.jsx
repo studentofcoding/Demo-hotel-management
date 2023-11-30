@@ -8,13 +8,17 @@ import Dining from './pages/Dining';
 import Events from './pages/Events';
 import Offers from './pages/Offers';
 import Profile from './pages/Profile';
+import Gallery from './pages/Gallery.jsx';
 import RoomsSuites from './pages/RoomsSuites';
 import Header from './components/Header';
+import HomeNav from './components/HomeNav.jsx';
+
 
 export default function App() {
   return (
     <BrowserRouter>
       <Header />
+      <HomeNav />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
@@ -25,6 +29,7 @@ export default function App() {
         <Route path="/event" element={<Events />} />
         <Route path="/offers" element={<Offers />} />
         <Route path="/rooms&suites" element={<RoomsSuites />} />
+        <Route path="/gallery" element={<Gallery />} />
       </Routes>
     </BrowserRouter>
   )
