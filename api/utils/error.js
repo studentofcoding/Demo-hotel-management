@@ -7,4 +7,4 @@ const errorHandler=(statuscode,message)=>{
 
 export default errorHandler;
 
-//ceating a custom error 
+//ceating a custom error like "the password is incorrect"

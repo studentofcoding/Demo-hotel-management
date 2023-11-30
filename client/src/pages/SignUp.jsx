@@ -15,7 +15,8 @@ function SignUp() {
   };
 
   const handleSubmit = async  (e) => {
-    e.preventDefault();  {/*the fetch function is used to communicate with a server, sending a POST request to the "/api/auth/signup" endpoint with JSON-formatted data in the request body.*/}
+    e.preventDefault();  
+    {/*the fetch function is used to communicate with a server, sending a POST request to the "/api/auth/signup" endpoint with JSON-formatted data in the request body.*/}  
 
     try {
       setLoading(true);
