@@ -13,11 +13,11 @@ function Header() {
             </h1>
             </Link>
             <ul className="flex gap-4">
-            <Link to="/signin">
+            <Link to="/sign-in">
               <li className="hidden sm:inline text-white hover:underline">Sign-In</li>
             </Link>  
 
-            <Link to="/signup">  
+            <Link to="/sign-up">  
               <li className="hidden sm:inline text-white hover:underline">Register</li>
             </Link>
 
