@@ -12,6 +12,7 @@ import Gallery from './pages/Gallery.jsx';
 import RoomsSuites from './pages/RoomsSuites';
 import Header from './components/Header';
 import HomeNav from './components/HomeNav.jsx';
+import PrivateRoute from './private/PrivateRoute.jsx';
 
 
 export default function App() {
@@ -21,7 +22,6 @@ export default function App() {
       <HomeNav />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/about" element={<About />} />
@@ -30,6 +30,9 @@ export default function App() {
         <Route path="/offers" element={<Offers />} />
         <Route path="/rooms&suites" element={<RoomsSuites />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route element={<PrivateRoute />}>              {/*blocking the access to the profile page if the user is not logged in */}
+        <Route path="/profile" element={<Profile />} />   
+      </Route>
       </Routes>
     </BrowserRouter>
   )
