@@ -40,6 +40,37 @@ const Signin=async(req,res,next)=>{
         next(error);
     }
 }
+
+const signingoogle=async(req,res,next)=>{
+    try {
+        const user=await User.findOne({email:req.body.email});
+        if(user){
+            const token=jwt.sign({id:user._id},process.env.JWT_SECRET);  //cookie
+            const {password:pass,...rest}=user._doc;   //basically here destructed   //here "rest" is the user without the password,sending the details from the database except the password and also .doc needed to be added
+            res
+                .cookie("token",token,{httpOnly:true})
+                .status(200)
+                .json(rest);
+        }else{
+            const generatedPassword=Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8); //all the letters of alaphabet and numbers from 0 to 9, numbers are sliced and the last 8 characters are taken,so that the password is of 16 characters
+            const hashedPassword=bcrypt.hashSync(generatedPassword,10);
+            const newUser=new User({
+                username:req.body.name.split(" ").join("").toLowerCase(),   
+                email:req.body.email,
+                password:hashedPassword,
+                avatar:req.body.photo});
+            await newUser.save();
+            const token=jwt.sign({id:newUser._id},process.env.JWT_SECRET);  //cookie
+            const {password:pass,...rest}=newUser._doc;   //basically here destructed   //here "rest" is the user without the password,sending the details from the database except the password
+            res
+                .cookie("token",token,{httpOnly:true})
+                .status(200)
+                .json(rest);
+        }
+    } catch (error) {
+        next(error);
+    }
+}
      
 
-export {signup,Signin};
+export {signup,Signin,signingoogle};

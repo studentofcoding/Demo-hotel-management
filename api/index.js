@@ -2,10 +2,12 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import authRouter from "./routes/auth.router.js";
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 const app=express();
 app.use(express.json()); //allow json inputs to the server
+app.use(cookieParser()); //allow cookie inputs to the server
 
 mongoose.connect(process.env.MONGO)
 .then(()=>console.log('DataBase is Connected successfully'))

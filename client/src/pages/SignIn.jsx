@@ -3,6 +3,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import {useState} from 'react';
 import {useDispatch,useSelector} from 'react-redux';
 import { signInStart,signInSuccess,signInError } from '../redux/user/userSlice.js';
+import OAuth from '../components/OAuth.jsx';
 
 function SignIn() {
   const [formData,setFormData]=useState({});  //useState is a hook that allows us to use state in a functional component
@@ -59,6 +60,7 @@ function SignIn() {
         {/* <input type="password" placeholder="confirm password" className="border p-3 rounded-lg" id="confirmPassword" /> */}
         <button disabled={loading} className="bg-slate-700 text-white p-3 rounded-lg uppercase 
         hover:opacity-95 disabled:opacity-80">{loading ? "Loading...":"Sign In"}</button>
+        <OAuth />
       </form>
       <div className='flex gap-2 mt-4'>    {/*mt margin top*/}
         <p>Dont have an account?</p>
