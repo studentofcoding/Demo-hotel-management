@@ -61,7 +61,7 @@ const signingoogle=async(req,res,next)=>{
                 avatar:req.body.photo});
             await newUser.save();
             const token=jwt.sign({id:newUser._id},process.env.JWT_SECRET);  //cookie
-            const {password:pass,...rest}=newUser._doc;   //basically here destructed   //here "rest" is the user without the password,sending the details from the database except the password
+            const {password:pass,...rest}=newUser._doc;   //basically here destructed   //here "rest" is the user without the password,sending the details from the user except the password
             res
                 .cookie("token",token,{httpOnly:true})
                 .status(200)
