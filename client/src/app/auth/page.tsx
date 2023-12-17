@@ -80,7 +80,9 @@ const Auth = () => {
             Sign Up
           </button>
         </form>
-
+        <button className='text-blue-700 underline'>
+          login
+        </button>
         </div>
     </div>
   )
