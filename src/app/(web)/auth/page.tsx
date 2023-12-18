@@ -4,6 +4,8 @@ import React from 'react';
 import { useState,ChangeEvent,FormEvent } from 'react';
 import { AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
+import toast from 'react-hot-toast';
+import { signUp } from 'next-auth-sanity/client';
 
 const defaultFormData = {
     email: '',
@@ -24,9 +26,13 @@ const Auth = () => {
         event.preventDefault();
     
         try {
-            console.log(formData);
+          const user = await signUp(formData);
+          if (user) {
+            toast.success('Success. Please sign in');
+          }
         } catch (error) {
-            console.log(error);
+          console.log(error);
+          toast.error("Something wen't wrong");
         } finally {
           setFormData(defaultFormData);
         }
