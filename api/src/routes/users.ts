@@ -42,9 +42,9 @@ userRouter.post("/register",[
     res.cookie("auth_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",  //this is used to check if the environment is production or not 
-        maxAge: 86400000,  //expiresIn: "1d", in milliseconds
+        maxAge: 86400000,  //expiresIn: "1d" in milliseconds
     });
-    res.status(201).json({ message: "User registered successfully", token });
+    res.status(201).json({ message: "User registered successfully", token });  //todo: remove token from response by consideration
 
   } catch (error) {
     console.log(error);
