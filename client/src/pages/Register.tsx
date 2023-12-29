@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 import * as apiClient from "../api-client";
+import { useAppContext } from "../Context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 export type RegisterFormData = {  //giving the form what type of data are expected
     firstName: string;
@@ -11,11 +13,18 @@ export type RegisterFormData = {  //giving the form what type of data are expect
   };
 
 const Register = () => {
+    const navigate = useNavigate();   
+    const { showToast }=useAppContext();   //now the component has the access to the showToast property //here we are using the useAppContext hook to use the context which we created in AppContext.tsx
     const { register,watch,handleSubmit,formState:{errors} }=useForm<RegisterFormData>(); //here we destructure the form data  //methods(register,watch) provided by React Hook Form. It's used to register form inputs.
 
     const mutation = useMutation(apiClient.register,{    //handles the fetch which is done in api-client in Register.tsx  //here we are using the useMutation hook to call the register fetch functions from the api-client.ts file,for more info refer the video https://www.youtube.com/watch?v=YdBy9-0pER4&t=30s at 2.07.25
-        onSuccess:()=>{console.log("User Registered")},  //if the user is registered successfully then we are logging the message
-        onError:(err:Error)=>{console.log(err.message)}  //here the "Error" is considered with the Error in api=client.ts Error 
+        onSuccess:()=>{                 //these types(SUCCESS,ERROR) are passed to AppContext to show as a toast message
+            showToast({message: "Registration Successful",type:"SUCCESS"})//this message is passed to AppContext to show as a toast message  //here we are calling the showToast function which we get from the useAppContext hook and passing the message and type to it
+            navigate("/")
+        },  
+        onError:(err:Error)=>{    //here the "Error" is considered with the Error in api=client.ts Error
+            showToast({message: err.message,type:"ERROR"})  //here we are calling the showToast function which we get from the useAppContext hook and passing the message and type to it
+        }   
     });   
 
     const onSubmit = handleSubmit((data) => {    //onSubmit is called when the button is clicked and pass the data to the handleSubmit which we get from useForm hook     //for a better understanding refer the video https://www.youtube.com/watch?v=YdBy9-0pER4&t=30s at 1.54.10

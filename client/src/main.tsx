@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'; // Correct import path
 import App from './App';
 import './index.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { AppContextProvider } from './Context/AppContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,7 +18,9 @@ if (rootElement) {
   createRoot(rootElement).render(
     <React.StrictMode>                            
       <QueryClientProvider client={queryClient}>           {/*for better understanding https://www.youtube.com/watch?v=YdBy9-0pER4&t=30s at 2.11.00*/}
-      <App />
+        <AppContextProvider>
+          <App />
+        </AppContextProvider>
       </QueryClientProvider>
     </React.StrictMode>
   );
