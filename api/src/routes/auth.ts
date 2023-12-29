@@ -3,11 +3,11 @@ import { check, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
+import verifyToken from "../middleware/auth";
 
 const authRouter = express.Router();
 
-authRouter.post(    "/login",
-  [
+authRouter.post("/login",[
     check("email", "Email is required").isEmail(),
     check("password", "Password is required atleast 6 characters").isLength({
       min: 6,
@@ -53,5 +53,9 @@ authRouter.post(    "/login",
     }
   }
 );
+
+authRouter.get("/validate-token",verifyToken,(req:Request,res:Response) => {    //this route is used to validate the token
+    res.status(200).json({message:"Token is valid",userId:req.userId});    //here we are sending the userId to the client
+});   
 
 export default authRouter;

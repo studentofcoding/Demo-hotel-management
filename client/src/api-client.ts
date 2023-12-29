@@ -6,6 +6,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;  //here we are taking th
 export const register = async (formData: RegisterFormData) => {     //here we are taking the type using RegisterFormData
     const response = await fetch(`${API_BASE_URL}/api/users/register`,{
         method:"POST",
+        credentials:"include",  //this is used to send the cookie to the server so that the server can identify the user
         headers:{
             "Content-Type":"application/json",
         },
@@ -15,4 +16,15 @@ export const register = async (formData: RegisterFormData) => {     //here we ar
     if(!response.ok){            //here we are checking if the response is ok or not which response.ok is a boolean value pre built
         throw new Error(responseBody.message);   //this Error is passed to the Register.tsx within mutation
     }
+};
+
+export const validateToken = async () => {     //validate token endpoint
+    const response = await fetch(`${API_BASE_URL}/api/auth/validate-token`,{
+        credentials:"include",  //this tells fetch request to send the any cookies available to the server
+    });
+    if(!response.ok){
+        throw new Error("Invalid token");
+    }
+
+    return response.json();
 };

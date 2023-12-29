@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 import Toast from "../components/Toast";
+import { useQuery } from "react-query";
+import * as apiClient from "../api-client";
 
 type ToastMessage = {
     message: string;
@@ -7,17 +9,25 @@ type ToastMessage = {
 };
 
 type AppContext = {
-    showToast: (toastMessage: ToastMessage) => void;  
+    showToast: (toastMessage: ToastMessage) => void;
+    isLoggedIn: boolean;  
 };
 
 const AppContext = React.createContext<AppContext | undefined >(undefined);  //here we are creating a context and passing the default value as undefined
   
 export const AppContextProvider = ({children}:{children: React.ReactNode}) =>{      //do all sort of hooks,states and other things  //AppContextProvider is a component which is used to wrap the components which we want to use the all the things in the context
     const [toast,setToast]=React.useState<ToastMessage | undefined>(undefined);   //here we are creating a state for the toast message and passing the default value as undefined
+
+    const {isError}= useQuery("validateToken",apiClient.validateToken,{   //useQuery handles all the errors   //here we are using the useQuery hook to call the validateToken fetch functions from the api-client.ts file,for more info refer the video https://www.youtube.com/watch?v=YdBy9-0pER4&t=30s at 2.56.50})
+        retry:false,    //here we are setting the retry to false so that it will not retry the fetch if there is any error
+    });     //here we are calling the validateToken function which we get from the api-client.ts file here it is going return there is an error or not
+
     return(
         <AppContext.Provider value={{showToast: (toastMessage)=> {
             setToast(toastMessage); 
-        }}}>
+        },
+        isLoggedIn: !isError,   //here we are checking if there is any error or not and if there is no error then we are setting the isLoggedIn to true
+        }}>
             {toast && <Toast message={toast.message} type={toast.type} onClose={()=>setToast(undefined)}/>} {/*make the re-rendering*/}  {/*"onClose={()=>setToast(undefined)} an arrow function like () => setToast(undefined) denotes a function without any arguments. When this arrow function is passed as a prop, such as onClose, the empty parentheses () signify that the function doesn’t require any arguments when it's invoked."*/}
             {children} 
         </AppContext.Provider>
