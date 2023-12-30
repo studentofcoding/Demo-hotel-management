@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../Context/AppContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export type RegisterFormData = {  //giving the form what type of data are expected
     firstName: string;
@@ -13,13 +13,15 @@ export type RegisterFormData = {  //giving the form what type of data are expect
   };
 
 const Register = () => {
+    const queryClient=useQueryClient();
     const navigate = useNavigate();   
     const { showToast }=useAppContext();   //now the component has the access to the showToast property //here we are using the useAppContext hook to use the context which we created in AppContext.tsx
     const { register,watch,handleSubmit,formState:{errors} }=useForm<RegisterFormData>(); //here we destructure the form data  //methods(register,watch) provided by React Hook Form. It's used to register form inputs.
 
     const mutation = useMutation(apiClient.register,{    //handles the fetch which is done in api-client in Register.tsx  //here we are using the useMutation hook to call the register fetch functions from the api-client.ts file,for more info refer the video https://www.youtube.com/watch?v=YdBy9-0pER4&t=30s at 2.07.25
-        onSuccess:()=>{                 //these types(SUCCESS,ERROR) are passed to AppContext to show as a toast message
+        onSuccess: async()=>{                 //these types(SUCCESS,ERROR) are passed to AppContext to show as a toast message
             showToast({message: "Registration Successful",type:"SUCCESS"})//this message is passed to AppContext to show as a toast message  //here we are calling the showToast function which we get from the useAppContext hook and passing the message and type to it
+            await queryClient.invalidateQueries("validateToken");  //refresh tokens after a successful registration. //here this "validateToken" is passed through AppContext.tsx this refreshers the browser when the user logs out automatically //here isLoggedIn is set to false in AppContext.tsx
             navigate("/")
         },  
         onError:(err:Error)=>{    //here the "Error" is considered with the Error in api=client.ts Error
@@ -80,7 +82,13 @@ const Register = () => {
                     })} />
                     {errors.confirmPassword && (<span className="text-red-500 text-sm">{errors.confirmPassword.message}</span>)}  {/*here we are checking if there is any error in the firstName field and if there is any error then we are displaying the error message*/}
                 </label>
-                <span>
+                <span className="flex items-center justify-between">
+                    <span className="text-sm">
+                        Already Registered?
+                            <Link className="underline p-1" to="/login">
+                                Login here
+                            </Link>
+                    </span>
                     <button type="submit" className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl">
                         Register
                     </button>
