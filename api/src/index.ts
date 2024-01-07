@@ -7,6 +7,7 @@ import authRouter from './routes/auth';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import { v2 as cloudinary } from 'cloudinary';
+import hotelRouter from './routes/my-hotels';
 
 // cloudinary.config({ 
 //     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
@@ -42,6 +43,7 @@ app.use(express.static(path.join(__dirname, "../../client/dist")));  //make the 
 
 app.use("/api/users",userRouter);  //this route is used to register the user
 app.use("/api/auth",authRouter);  //this route is used to login the user
+app.use("/api/my-hotels",hotelRouter);  //this route is used to add a new hotel
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');

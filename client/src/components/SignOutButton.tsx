@@ -8,7 +8,7 @@ const SignOutButton = () => {
     const mutation=useMutation(apiClient.logOut,{
         onSuccess: async()=>{
             await queryClient.invalidateQueries("validateToken"); //here this "validateToken" is passed through AppContext.tsx this refreshers the browser when the user logs out automatically //here isLoggedIn is set to false in AppContext.tsx
-            showToast({message:"Logout Successful",type:"SUCCESS"})
+            showToast({message:"Logout Successful",type:"SUCCESS"})   //here the signOut is linked to route/auth.ts where the auth_token is removed from the cookie then the "validateToken" is called which returns the error "Invalid Token" then the isLoggedIn is set to false in AppContext.tsx and the user is redirected to the login page 
         },
         onError: (err:Error)=>{
             showToast({message:err.message,type:"ERROR"})

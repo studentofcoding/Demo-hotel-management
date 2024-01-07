@@ -5,7 +5,7 @@ import * as apiClient from "../api-client";
 
 type ToastMessage = {
     message: string;
-    type: "SUCCESS" | "ERROR";   //here we are defining the type of the message these are predefined types
+    type: "SUCCESS" | "ERROR";   //here we are defining the type of the message these are predefined types in the register.tsx
 };
 
 type AppContext = {
