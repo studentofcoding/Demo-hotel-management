@@ -26,7 +26,7 @@ export const Login = async (formData: SignInFormData) => {    //here we are taki
         headers:{
             "Content-Type":"application/json",
         },
-        body:JSON.stringify(formData),
+        body:JSON.stringify(formData),   //here we are converting the formData into JSON string
     });   
     const responseBody = await response.json();
     if(!response.ok){            //here we are checking if the response is ok or not which response.ok is a boolean value pre built
@@ -56,5 +56,23 @@ export const logOut = async () => {
         throw new Error("Error logging out");
     }
 };
+
+export const addHotel = async (HotelFormData: FormData) => {      //here we are taking the type using HotelFormData,we are accepting the form data after the form submission
+    const response = await fetch(`${API_BASE_URL}/api/my-hotels`,{
+        method:"POST",
+        credentials:"include",
+        body:HotelFormData,    //here we are just passing the form data,here it doesn't matter because we using append in the ManageHotelForm.tsx
+    });
+    if(!response.ok){
+        throw new Error("Failed to add hotel");
+    }
+    return response.json();
+}
+
+
+
+
+
+
 
 //api-client=>AppContext(toastMessage) => Header 

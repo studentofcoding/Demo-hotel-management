@@ -22,7 +22,7 @@ const Register = () => {
         onSuccess: async()=>{                 //these types(SUCCESS,ERROR) are passed to AppContext to show as a toast message
             showToast({message: "Registration Successful",type:"SUCCESS"})//this message is passed to AppContext to show as a toast message  //here we are calling the showToast function which we get from the useAppContext hook and passing the message and type to it
             await queryClient.invalidateQueries("validateToken");  //refresh tokens after a successful registration. //here this "validateToken" is passed through AppContext.tsx this refreshers the browser when the user logs out automatically //here isLoggedIn is set to false in AppContext.tsx
-            navigate("/")
+            navigate("/")      //here in invalidateQueries a query will mark as stale, When a query is marked as stale, it means the data fetched by that query is no longer considered valid or up-to-date. The next time this query is requested, React Query will refetch the data, ensuring fresh information.
         },  
         onError:(err:Error)=>{    //here the "Error" is considered with the Error in api=client.ts Error
             showToast({message: err.message,type:"ERROR"})  //here we are calling the showToast function which we get from the useAppContext hook and passing the message and type to it
