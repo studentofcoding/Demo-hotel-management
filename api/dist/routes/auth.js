@@ -27,7 +27,7 @@ authRouter.post("/login", [
 ], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ message: errors.array() });
+        return res.status(400).json({ message: errors.array() }); //if there is any error in the validation, then it will be sent to the client side
     }
     const { email, password } = req.body;
     try {

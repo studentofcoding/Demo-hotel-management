@@ -26,6 +26,6 @@ const AddHotel = () => {
 
 export default AddHotel;
 
-//addHotel is tested after deploying to render.com with time frame 
+//further from this point addHotel is tested after deploying to render.com with time frame 
 //https://www.youtube.com/watch?v=YdBy9-0pER4&list=PLpH4xB252nMF-I26wZ0RRZ3OtdZk_qGtd&index=12&t=18000s 
-//at 7.09.37 but right now this project is rendering in render.com 
+//at 7.12.37 but right now this project is not rendering in render.com  

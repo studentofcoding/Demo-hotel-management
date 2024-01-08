@@ -39,11 +39,15 @@ app.use(cors({
     credentials: true,      //this is used to send the cookie to the server so that the server can identify the user where the security is increased
 }));
 
-app.use(express.static(path.join(__dirname, "../../client/dist")));  //make the connection to the frontend to run in the same localhost or the same server simultaneously
+app.use(express.static(path.join(__dirname, "../../client/dist")));   //for deployment  //make the connection to the frontend to run in the same localhost or the same server simultaneously
 
 app.use("/api/users",userRouter);  //this route is used to register the user
 app.use("/api/auth",authRouter);  //this route is used to login the user
 app.use("/api/my-hotels",hotelRouter);  //this route is used to add a new hotel
+
+app.get("*",(req:Request,res:Response) => {
+    res.sendFile(path.join(__dirname, "../../client/dist/index.html"));  //for deployment //pass on any request url that are not api endpoints the reason we are doing this is because of some our routes are behind conditional logic and wont be a part of the static files that are done above 
+});
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');

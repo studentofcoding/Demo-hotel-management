@@ -2,7 +2,7 @@
 import { SignInFormData } from "./pages/Login";
 import { RegisterFormData } from "./pages/Register";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";    //use the same service route  //here we are taking the api base url from the .env file the reason we are using this particular way is because base url is going to change when we rendering the project
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";    //use the same service route  //here we are saying the fetch request that there is no API_BASE_URL so use the same server for all the requests
 
 export const register = async (formData: RegisterFormData) => {     //here we are taking the type using RegisterFormData
     const response = await fetch(`${API_BASE_URL}/api/users/register`,{
