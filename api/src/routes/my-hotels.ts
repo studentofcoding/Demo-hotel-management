@@ -67,4 +67,13 @@ hotelRouter.post("/",verifyToken,[
     }
 });
 
+hotelRouter.get("/",verifyToken, async(req:Request,res:Response) => {
+    try {
+        const hotels = await Hotel.find({userId:req.userId});   //here we are finding the hotels with the userId
+        res.json(hotels)
+    } catch (error) {
+        res.status(500).send("Something went wrong");
+    }
+})
+
 export default hotelRouter;
