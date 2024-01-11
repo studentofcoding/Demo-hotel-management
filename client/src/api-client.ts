@@ -1,7 +1,7 @@
 //all the fetch requests are made here
 import { SignInFormData } from "./pages/Login";
 import { RegisterFormData } from "./pages/Register";
-import { HotelType } from "../../api/src/models/hotel";
+import { HotelType } from "../../api/src/shared/types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";    //use the same service route  //here we are saying the fetch request that there is no API_BASE_URL so use the same server for all the requests
 
@@ -70,7 +70,7 @@ export const addHotel = async (HotelFormData: FormData) => {      //here we are 
     return response.json();
 }
 
-export const getMyHotels = async ():Promise<HotelType> => {    //here () is empty because we are not sending any data to the server //the http cookie will sent automatically where we get the userId(from my-hotels.ts)
+export const getMyHotels = async ():Promise<HotelType[]> => {    //here () is empty because we are not sending any data to the server //the http cookie will sent automatically where we get the userId(from my-hotels.ts)
     const response = await fetch(`${API_BASE_URL}/api/my-hotels`,{   //in the above we make promise to get the data as same as the HotelType because of this there is no data misrepresentation also in future if we want to add a new feature we can just make changes in the HotelType
         credentials:"include",
     });
