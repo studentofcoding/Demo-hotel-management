@@ -81,8 +81,28 @@ export const getMyHotels = async ():Promise<HotelType[]> => {    //here () is em
 }
 
 
+export const getMyHotelById = async (hotelId:string):Promise<HotelType> => {     //here we are taking the id of the hotel
+    const response = await fetch(`${API_BASE_URL}/api/my-hotels/${hotelId}`,{
+        credentials:"include",
+    });
+    if(!response.ok){
+        throw new Error("Failed to get hotel");
+    }
+    return response.json();
+}    
 
 
+export const updateHotelById = async (HotelFormData: FormData) => {         
+    const response = await fetch(`${API_BASE_URL}/api/my-hotels/${HotelFormData.get("hotelId")}`,{    //here the hotelId is passed from manageHotelForm.tsx formData.append("hotelId",hotel._id);
+        method:"PUT",
+        credentials:"include",
+        body:HotelFormData,    //here we are just passing the form data,here it doesn't matter because we using append already in the ManageHotelForm.tsx
+    });
+    if(!response.ok){
+        throw new Error("Failed to update hotel");
+    }
+    return response.json();
+};
 
 
 

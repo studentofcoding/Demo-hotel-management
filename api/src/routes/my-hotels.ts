@@ -38,17 +38,25 @@ hotelRouter.post("/",verifyToken,[
 
 
         //uploading the images to cloudinary
-        const uploadPromises = imageFiles.map(async(image)=>{     //the "imageFiles" here is the const in try block
-            const b64 = Buffer.from(image.buffer).toString("base64");   //here we are converting the image to base64 string so that we can send it to the cloudinary
-            const dataURI = "data:" + image.mimetype + ";base64," + b64;    //here this string describes the image  //"mimetype" is the type of the image jpg/png
-            const res = await cloudinary.v2.uploader.upload(dataURI);   //here we are uploading the image to cloudinary
+        const imageUrls = await uploadImages(imageFiles);   //here we are waiting for all the images to upload to the cloudinary before continuing the execution of the code
+        //**** here the below function is refactored so we can  use this function more than once easily
 
-            return res.url;  //here we are returning the url of the image
-            //because this function is async the images will upload to the cloudinary simultaneously
-        });
+        //**************** 
+        //uploading the images to cloudinary
+        //  const uploadPromises = imageFiles.map(async(image)=>{     //the "imageFiles" here is the const in try block
+        //     const b64 = Buffer.from(image.buffer).toString("base64");   //here we are converting the image to base64 string so that we can send it to the cloudinary
+        //     const dataURI = "data:" + image.mimetype + ";base64," + b64;    //here this string describes the image  //"mimetype" is the type of the image jpg/png
+        //     const res = await cloudinary.v2.uploader.upload(dataURI);   //here we are uploading the image to cloudinary
 
-        //if the upload is successful,add the urls  to the new hotel
-        const imageUrls = await Promise.all(uploadPromises);   //here we are waiting for all the images to upload to the cloudinary before continuing the execution of the code
+        //     return res.url;  //here we are returning the url of the image
+        //     //because this function is async the images will upload to the cloudinary simultaneously
+        // });
+
+        // //if the upload is successful,add the urls  to the new hotel
+        // const imageUrls = await Promise.all(uploadPromises);   //here we are waiting for all the images to upload to the cloudinary before continuing the execution of the code
+
+        //****************
+
         newHotel.imageUrls = imageUrls;   //here we are adding the imageUrls from the cloudinary to the new hotel
         newHotel.lastUpdated = new Date();   //here we are adding the lastUpdated date to the new hotel
         newHotel.userId = req.userId;   //here we are adding the userId to the new hotel,this is taken from the auth_token
@@ -76,5 +84,79 @@ hotelRouter.get("/",verifyToken, async(req:Request,res:Response) => {
         res.status(500).send("Something went wrong");
     }
 })
+
+hotelRouter.get("/:id",verifyToken,async(req:Request,res:Response) => {
+    const id = req.params.id.toString(); //here we are taking the id of the hotel
+    try {
+        const hotel = await Hotel.findOne({
+            _id:id,
+            userId:req.userId,     //here we are finding the hotel with the id and the userId
+        });   
+        res.json(hotel);
+    } catch (error) {
+        res.status(500).send("Error fetching hotel");
+    }
+});  
+
+hotelRouter.put("/:hotelId",verifyToken,upload.array("imageFiles"), async(req:Request,res:Response) => {     //here we are passing the hotelId from the EditHotel.tsx the useParams
+    try {
+        const updatedHotel:HotelType = req.body;   //here we are taking the updated hotel details from the req.body
+        updatedHotel.lastUpdated = new Date();   //here we are adding the lastUpdated date to the updated hotel
+
+        const hotel = await Hotel.findOneAndUpdate({
+            _id:req.params.hotelId,   //here we are finding the hotel with the hotelId
+            userId:req.userId,   //here we are finding the hotel with the userId
+        },updatedHotel,{new:true});    //here we are updating the hotel with the updated hotel details
+
+        if(!hotel){
+            return res.status(404).send("Hotel not found");
+        }
+
+        const files = req.files as Express.Multer.File[];   //here we are taking the any new files if the user decides to add new images
+
+        const updatedImageUrls = await uploadImages(files); 
+
+        hotel.imageUrls = [...updatedImageUrls,...updatedHotel.imageUrls || []];   //here we are adding the updated imageUrls to the hotel
+        
+        //  //uploading the images to cloudinary
+        // const uploadPromises = files.map(async(image)=>{     //the "imageFiles" here is the const in try block
+        //     const b64 = Buffer.from(image.buffer).toString("base64");   //here we are converting the image to base64 string so that we can send it to the cloudinary
+        //     const dataURI = "data:" + image.mimetype + ";base64," + b64;    //here this string describes the image  //"mimetype" is the type of the image jpg/png
+        //     const res = await cloudinary.v2.uploader.upload(dataURI);   //here we are uploading the image to cloudinary
+
+        //     return res.url;  //here we are returning the url of the image
+        //     //because this function is async the images will upload to the cloudinary simultaneously
+        // });
+
+        // //if the upload is successful,add the urls  to the new hotel
+        // const imageUrls = await Promise.all(uploadPromises);   //here we are waiting for all the images to upload to the cloudinary before continuing the execution of the code
+
+        await hotel.save();   //here we are saving the updated hotel to the database
+        res.status(200).send(hotel);   //here we are sending the updated hotel details to the frontend
+
+    } catch (error) {
+        res.status(500).send("Something went wrong");
+    }
+});
+
+
+
+
+async function uploadImages(imageFiles: Express.Multer.File[]) {
+    const uploadPromises = imageFiles.map(async (image) => {
+        const b64 = Buffer.from(image.buffer).toString("base64"); //here we are converting the image to base64 string so that we can send it to the cloudinary
+        const dataURI = "data:" + image.mimetype + ";base64," + b64; //here this string describes the image  //"mimetype" is the type of the image jpg/png
+        const res = await cloudinary.v2.uploader.upload(dataURI); //here we are uploading the image to cloudinary
+
+        return res.url; //here we are returning the url of the image
+
+        //because this function is async the images will upload to the cloudinary simultaneously
+    });
+
+    //if the upload is successful,add the urls  to the new hotel
+    const imageUrls = await Promise.all(uploadPromises); //here we are waiting for all the images to upload to the cloudinary before continuing the execution of the code
+    return imageUrls;
+}
+
 
 export default hotelRouter;
