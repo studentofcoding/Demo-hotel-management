@@ -46,11 +46,11 @@ test("should display hotels", async ({ page }) => {
     await page.goto(`${UI_URL}/my-hotels`);
   
     await expect(page.getByText("kingsbury")).toBeVisible({timeout: 50000});
-    await expect(page.getByText("Lorem Ipsum is simply dummy text")).toBeVisible();
-    await expect(page.getByText("texas, UK")).toBeVisible();
-    await expect(page.getByText("Luxury").first()).toBeVisible();
-    await expect(page.getByText("£305 per night").first()).toBeVisible();
-    await expect(page.getByText("2 adults, 2 children").first()).toBeVisible();
+    await expect(page.getByText("Contrary to popular belief, Lorem Ipsum")).toBeVisible();
+    await expect(page.getByText("colombo, Sri Lanka")).toBeVisible();
+    await expect(page.getByText("Hiking Resort")).toBeVisible();
+    await expect(page.getByText("£200 per night")).toBeVisible();
+    await expect(page.getByText("2 adults, 3 children")).toBeVisible();
     await expect(page.getByText("5 Star Rating").first()).toBeVisible();
   
     await expect(
