@@ -37,7 +37,6 @@ test('should allow the user to add a hotel', async ({ page }) => {
     await page.setInputFiles("[name='imageFiles']",[
         path.join(__dirname, "files", "1.jpg"),
         path.join(__dirname, "files", "2.jpg"),
-        path.join(__dirname, "files", "3.jpg"),
     ]);
     await page.getByRole("button",{name:"Create"}).click();  //here we are clicking the add hotel button
     await expect(page.getByText("Hotel created successfully")).toBeVisible({timeout: 50000});  //here we are checking if the hotel is added successfully or not  //here we are giving the timeout because it takes some time to add the hotel
@@ -47,14 +46,34 @@ test("should display hotels", async ({ page }) => {
     await page.goto(`${UI_URL}/my-hotels`);
   
     await expect(page.getByText("kingsbury")).toBeVisible({timeout: 50000});
-    await expect(page.getByText("Contrary to popular belief")).toBeVisible();
-    await expect(page.getByText("colombo, Sri Lanka")).toBeVisible();
-    await expect(page.getByText("Hiking Resort")).toBeVisible();
-    await expect(page.getByText("£200 per night")).toBeVisible();
-    await expect(page.getByText("2 adults, 3 children")).toBeVisible();
-    await expect(page.getByText("5 Star Rating")).toBeVisible();
+    await expect(page.getByText("Lorem Ipsum is simply dummy text")).toBeVisible();
+    await expect(page.getByText("texas, UK")).toBeVisible();
+    await expect(page.getByText("Luxury").first()).toBeVisible();
+    await expect(page.getByText("£305 per night").first()).toBeVisible();
+    await expect(page.getByText("2 adults, 2 children").first()).toBeVisible();
+    await expect(page.getByText("5 Star Rating").first()).toBeVisible();
   
     await expect(
       page.getByRole("link", { name: "View Details" }).first()).toBeVisible();
     await expect(page.getByRole("link", { name: "Add Hotel" })).toBeVisible();
+  });
+
+  test("should edit hotel", async ({ page }) => {
+    await page.goto(`${UI_URL}/my-hotels`);
+  
+    await page.getByRole("link", { name: "View Details" }).first().click();
+  
+    await page.waitForSelector('[name="name"]', { state: "attached" });
+    await expect(page.locator('[name="name"]')).toHaveValue("kingsbury");
+    await page.locator('[name="name"]').fill("kingsbury update");
+    await page.getByRole("button", { name: "create" }).click();
+    await expect(page.getByText("Hotel updated successfully")).toBeVisible();
+  
+    await page.reload();
+  
+    await expect(page.locator('[name="name"]')).toHaveValue(
+      "kingsbury update"
+    );
+    await page.locator('[name="name"]').fill("kingsbury");
+    await page.getByRole("button", { name: "create" }).click();
   });
