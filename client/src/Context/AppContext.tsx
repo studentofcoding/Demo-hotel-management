@@ -45,3 +45,5 @@ export const useAppContext = () => {     //here we are creating a custom hook to
 //It allows components to access these shared values without needing to pass props explicitly through intermediate components. 
 //This is particularly useful for global data like themes, user authentication, language preferences, etc., which many components across the application might need access to.
 //It helps in managing the state or providing global data without the need for prop drilling (passing props through multiple layers of components), improving code maintainability and reducing code complexity.
+
+//AppContext is similar as the redux store

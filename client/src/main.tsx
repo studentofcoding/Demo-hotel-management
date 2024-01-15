@@ -4,6 +4,7 @@ import App from './App';
 import './index.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { AppContextProvider } from './Context/AppContext';
+import { SearchContextProvider } from './Context/SearchContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,7 +20,9 @@ if (rootElement) {
     <React.StrictMode>                            
       <QueryClientProvider client={queryClient}>           {/*for better understanding https://www.youtube.com/watch?v=YdBy9-0pER4&t=30s at 2.11.00*/}
         <AppContextProvider>
-          <App />
+          <SearchContextProvider>
+            <App />
+          </SearchContextProvider>
         </AppContextProvider>
       </QueryClientProvider>
     </React.StrictMode>
