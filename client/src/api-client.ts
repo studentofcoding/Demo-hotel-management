@@ -1,7 +1,7 @@
 //all the fetch requests are made here
 import { SignInFormData } from "./pages/Login";
 import { RegisterFormData } from "./pages/Register";
-import { HotelType } from "../../api/src/shared/types";
+import { HotelSearchResponse, HotelType } from "../../api/src/shared/types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";    //use the same service route  //here we are saying the fetch request that there is no API_BASE_URL so use the same server for all the requests
 
@@ -103,6 +103,33 @@ export const updateHotelById = async (HotelFormData: FormData) => {
     }
     return response.json();
 };
+
+export type searchParams = {
+    destination?:string; 
+    checkIn?:string;
+    checkOut?:string;
+    adultsCount?:string;
+    childrenCount?:string;
+    page?:string;
+}
+
+export const searchHotels = async (searchParams:searchParams): Promise<HotelSearchResponse> => {    //to expect what type of to be received by the query      //here we are taking the type using searchParams
+    const queryParams = new URLSearchParams();   
+    queryParams.append("destination",searchParams.destination || "");   //here we are appending the searchParams to the queryParams
+    queryParams.append("checkIn",searchParams.checkIn || "");
+    queryParams.append("checkOut",searchParams.checkOut || "");
+    queryParams.append("adultsCount",searchParams.adultsCount || "");
+    queryParams.append("childrenCount",searchParams.childrenCount || "");
+    queryParams.append("page",searchParams.page || "");
+
+    const response = await fetch(`${API_BASE_URL}/api/hotels/search?${queryParams}`);        //here we are passing the queryParams to the fetch request
+ 
+    if(!response.ok){
+        throw new Error("Failed to search hotels");
+    }
+
+    return response.json();
+}    
 
 
 
