@@ -3,10 +3,11 @@ import { useSearchContext } from "../Context/SearchContext";
 import * as apiClient from "../api-client";
 import { useState } from "react";
 import SearchResultCard from "../components/SearchResultCard";
+import Pagination from "../components/Pagination";
 
 const Search = () => {
     const search = useSearchContext();
-    const [page, setPage] = useState<number>(1);   //here we are setting the page number to 1
+    const [page, setPage] = useState<number>(1);   //here we are setting the page number to 1 from here we are taking the current page number and then we are passing it to the pagination component    
     
     const searchParams = {
         destination: search.destination,
@@ -40,6 +41,11 @@ const Search = () => {
                 {hotelData?.data.map((hotel) => (
                     <SearchResultCard hotel={hotel} />
                 ))}
+                <div>
+                    <Pagination page={hotelData?.pagination.page || 1} 
+                    pages={hotelData?.pagination.pages || 1}
+                    onPageChange={(page) => setPage(page)} />
+                </div>
             </div>
         </div>
     );
