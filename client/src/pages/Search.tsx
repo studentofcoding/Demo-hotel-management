@@ -77,9 +77,13 @@ const Search = () => {
             <div className="flex flex-col gap-5">
                 <div className="flex items-center justify-between">
                     <span className="text-xl font-bold">
-                    {hotelData?.pagination.total} Hotels found
-                    {search.destination ? ` in ${search.destination}` : ""}
+                    {hotelData?.pagination.total ? search.destination ? `Hotels found in ${search.destination}` : `${hotelData?.pagination.total} Hotels found`  : "" } 
+                    
+                    {/* {hotelData?.pagination.total} Hotels found
+                    {search.destination ? ` in ${search.destination}` : ""} */}
+                    
                     </span>
+                    
                     <select value={sortOption} onChange={(event) => setSortOption(event.target.value)} className="p-2 border rounded-md">    {/*here we are sending the value of sortOptions to backend hotels.ts where the value obtain from the state will be passed to "let sortOption = {};" to backend hotels.ts */}
                         <option value="">SortBy</option>
                         <option value="starRating">Star Rating</option>   {/*here the starRating pricePerNightAsc pricePerNightDesc is taken from hotels.ts switch function*/}
