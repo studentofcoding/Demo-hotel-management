@@ -111,6 +111,11 @@ export type searchParams = {
     adultsCount?:string;
     childrenCount?:string;
     page?:string;
+    facilities?:string[];
+    types?:string[];
+    stars?:string[];
+    maxPrice?:string;
+    sortOption?:string;
 }
 
 export const searchHotels = async (searchParams:searchParams): Promise<HotelSearchResponse> => {    //to expect what type of to be received by the query      //here we are taking the type using searchParams
@@ -122,13 +127,28 @@ export const searchHotels = async (searchParams:searchParams): Promise<HotelSear
     queryParams.append("childrenCount",searchParams.childrenCount || "");
     queryParams.append("page",searchParams.page || "");
 
+    queryParams.append("maxPrice",searchParams.maxPrice || "");
+    queryParams.append("sortOption",searchParams.sortOption || "");
+
+    //*****all the 3 searchParams(facilities,types,stars) below are need to be made to a array of strings in the backend constructSearchQuery  */
+    searchParams.facilities?.forEach((facility) => {     //if there any facilities selected by the user in the UI then we are appending it to the queryParams then we are passing it to the fetch request to the backend
+        queryParams.append("facilities",facility);
+    });
+    searchParams.types?.forEach((type) => {     //if there any types selected by the user in the UI then we are appending it to the queryParams then we are passing it to the fetch request to the backend
+        queryParams.append("types",type);
+    });
+    searchParams.stars?.forEach((star) => {     //if there any stars selected by the user in the UI then we are appending it to the queryParams then we are passing it to the fetch request to the backend
+        queryParams.append("stars",star);
+    });
+
     const response = await fetch(`${API_BASE_URL}/api/hotels/search?${queryParams}`);        //here we are passing the queryParams to the fetch request
- 
+
     if(!response.ok){
         throw new Error("Failed to search hotels");
     }
 
     return response.json();
+    
 }    
 
 
