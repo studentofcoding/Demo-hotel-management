@@ -65,7 +65,7 @@ export const addHotel = async (HotelFormData: FormData) => {      //here we are 
         body:HotelFormData,    //here we are just passing the form data,here it doesn't matter because we using append in the ManageHotelForm.tsx
     });
     if(!response.ok){
-        throw new Error("Failed to add hotel");
+        throw new Error("Failed to add hotel(api-client.ts addHotel)");
     }
     return response.json();
 }
@@ -75,7 +75,7 @@ export const getMyHotels = async ():Promise<HotelType[]> => {    //here () is em
         credentials:"include",
     });
     if(!response.ok){
-        throw new Error("Failed to get hotels");
+        throw new Error("Failed to get hotels(api-client.ts getMyHotels)");
     }
     return response.json();
 }
@@ -86,7 +86,7 @@ export const getMyHotelById = async (hotelId:string):Promise<HotelType> => {    
         credentials:"include",
     });
     if(!response.ok){
-        throw new Error("Failed to get hotel");
+        throw new Error("Failed to get hotel (api-client.ts getMyHotelById)");
     }
     return response.json();
 }    
@@ -99,7 +99,7 @@ export const updateHotelById = async (HotelFormData: FormData) => {
         body:HotelFormData,    //here we are just passing the form data,here it doesn't matter because we using append already in the ManageHotelForm.tsx
     });
     if(!response.ok){
-        throw new Error("Failed to update hotel");
+        throw new Error("Failed to update hotel(api-client.ts updateHotelById)");
     }
     return response.json();
 };
@@ -144,7 +144,7 @@ export const searchHotels = async (searchParams:searchParams): Promise<HotelSear
     const response = await fetch(`${API_BASE_URL}/api/hotels/search?${queryParams}`);        //here we are passing the queryParams to the fetch request
 
     if(!response.ok){
-        throw new Error("Failed to search hotels");
+        throw new Error("Failed to search hotels(api-client.ts searchHotels)");
     }
 
     return response.json();
@@ -154,7 +154,7 @@ export const searchHotels = async (searchParams:searchParams): Promise<HotelSear
 export const getHotelById = async (hotelId:string):Promise<HotelType> => {      //here we are taking the id of the hotel
     const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}`);
     if(!response.ok){
-        throw new Error("Failed to get hotel");
+        throw new Error("Failed to get hotel(api-client.ts getHotelById)");
     }
     return response.json();
 }

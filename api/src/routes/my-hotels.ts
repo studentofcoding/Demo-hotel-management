@@ -72,7 +72,7 @@ hotelRouter.post("/",verifyToken,[
 
     } catch (error) {
         console.log("Error creating a new hotel",error);
-        res.status(500).send("Something went wrong");   //in the tutorial res.status(500).json({message:"Something went wrong"}) is used
+        res.status(500).send("Something went wrong(my-hotels.ts POST/)");   //in the tutorial res.status(500).json({message:"Something went wrong"}) is used
     }
 });
 
@@ -81,7 +81,7 @@ hotelRouter.get("/",verifyToken, async(req:Request,res:Response) => {
         const hotels = await Hotel.find({userId:req.userId});   //here we are finding the hotels with the userId
         res.json(hotels)
     } catch (error) {
-        res.status(500).send("Something went wrong");
+        res.status(500).send("Something went wrong(hotels.ts GET/)");
     }
 })
 
@@ -94,7 +94,7 @@ hotelRouter.get("/:id",verifyToken,async(req:Request,res:Response) => {
         });   
         res.json(hotel);
     } catch (error) {
-        res.status(500).send("Error fetching hotel");
+        res.status(500).send("Error fetching hotel(hotels.ts GET/:id)");
     }
 });  
 
@@ -135,7 +135,7 @@ hotelRouter.put("/:hotelId",verifyToken,upload.array("imageFiles"), async(req:Re
         res.status(200).send(hotel);   //here we are sending the updated hotel details to the frontend
 
     } catch (error) {
-        res.status(500).send("Something went wrong");
+        res.status(500).send("Something went wrong(hotels.ts PUT/:hotelId)");
     }
 });
 

@@ -50,7 +50,7 @@ searchRouter.get("/search", async (req: Request, res: Response) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: "Something went wrong" });
+        res.status(500).json({ error: "Something went wrong(hotel.ts GET/search)" });
     }
 });
 
@@ -66,7 +66,7 @@ searchRouter.get("/:id",[param("id").notEmpty().withMessage("Hotel Id is require
     res.json(hotel);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Error fetching hotel" });
+    res.status(500).json({ error: "Error fetching hotel(hotel.ts GET/:id)" });
   }
 });
 

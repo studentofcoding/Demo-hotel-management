@@ -48,7 +48,7 @@ userRouter.post("/register",[
 
   } catch (error) {
     console.log(error);
-    res.status(500).send({ message: "Error registering user" });
+    res.status(500).send({ message: "Error registering user(users.ts POST/register)" });
   }
 });
 
