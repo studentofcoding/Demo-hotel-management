@@ -111,3 +111,5 @@ const SearchBar = () => {
 };
 
 export default SearchBar;
+
+//the searchBar is shown in the every page of the website it has done through the layout.tsx

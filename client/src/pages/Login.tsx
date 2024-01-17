@@ -2,12 +2,12 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../Context/AppContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export type SignInFormData = {
     email: string;
     password: string;
-  };
+};
 
 
 const Login = () => {
@@ -15,12 +15,13 @@ const Login = () => {
     const {register,formState:{errors},handleSubmit}=useForm<SignInFormData>();
     const {showToast}=useAppContext();
     const navigate=useNavigate();
+    const location=useLocation();
 
     const mutation=useMutation(apiClient.Login,{
         onSuccess: async()=>{
             showToast({message:"Login Successful",type:"SUCCESS"});
             await queryClient.invalidateQueries("validateToken"); //refresh tokens after a successful registration. //here this "validateToken" is passed through AppContext.tsx this refreshers the browser when the user logs out automatically //here isLoggedIn is set to false in AppContext.tsx
-            navigate("/")
+            navigate(location.state?.from?.pathname || "/");    //linked with GuestInfoForm.tsx //here we are checking if the user is redirected from any page then we are redirecting the user to that page else we are redirecting the user to the home page ("/") the reason we altered this navigate function is because when the user is redirected to the login page from the details page then after login the user should be redirected to the details page again which happens in Details.tsx=>GuestInfoForm.tsx
         },onError: (err:Error)=>{     //to handle the errors from backend    //here the "Error" is considered with the Error in api=client.ts Error
             showToast({message:err.message,type:"ERROR"})
         }

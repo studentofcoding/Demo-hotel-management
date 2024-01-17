@@ -118,7 +118,7 @@ export type searchParams = {
     sortOption?:string;
 }
 
-export const searchHotels = async (searchParams:searchParams): Promise<HotelSearchResponse> => {    //to expect what type of to be received by the query      //here we are taking the type using searchParams
+export const searchHotels = async (searchParams:searchParams): Promise<HotelSearchResponse> => {    //to expect what type of to be received by the query  //here we are taking the type using searchParams
     const queryParams = new URLSearchParams();   
     queryParams.append("destination",searchParams.destination || "");   //here we are appending the searchParams to the queryParams
     queryParams.append("checkIn",searchParams.checkIn || "");
@@ -149,7 +149,15 @@ export const searchHotels = async (searchParams:searchParams): Promise<HotelSear
 
     return response.json();
     
-}    
+}
+
+export const getHotelById = async (hotelId:string):Promise<HotelType> => {      //here we are taking the id of the hotel
+    const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}`);
+    if(!response.ok){
+        throw new Error("Failed to get hotel");
+    }
+    return response.json();
+}
 
 
 

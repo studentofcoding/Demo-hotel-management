@@ -1,11 +1,12 @@
 import express, { Response, Request } from 'express';
 import Hotel from '../models/hotel';
 import { HotelSearchResponse } from '../shared/types';
+import { param, validationResult } from 'express-validator';
 
 
 const searchRouter = express.Router();
 
-// /api/hotels/search?
+// /api/hotels/search?       //order matters for 1.searchRouter.get("/search"   then   2.searchRouter.get("/:id"   then   3.constructSearchQuery  
 searchRouter.get("/search", async (req: Request, res: Response) => {
     try {
         const query = constructSearchQuery(req.query);   //This line calls the constructSearchQuery function and passes the query parameters to it. The function returns a MongoDB query object that we can use to search for hotels.
@@ -51,6 +52,22 @@ searchRouter.get("/search", async (req: Request, res: Response) => {
         console.log(error);
         res.status(500).json({ error: "Something went wrong" });
     }
+});
+
+searchRouter.get("/:id",[param("id").notEmpty().withMessage("Hotel Id is required")], async (req: Request, res: Response) => {
+  const errors = validationResult(req);   //This line checks if there are any validation errors in the request. If there are, it returns a 400 response with the errors.
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const id = req.params.id.toString();   //This line extracts the id parameter from the request.
+  try {
+    const hotel = await Hotel.findById(id);   //This line executes a MongoDB query to retrieve a hotel by id.
+    res.json(hotel);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error fetching hotel" });
+  }
 });
 
 //********1.from here the query is taken and passed to sorting options above */
