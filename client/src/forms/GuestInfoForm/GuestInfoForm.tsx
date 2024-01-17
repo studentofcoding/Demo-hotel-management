@@ -146,3 +146,5 @@ const GuestInfoForm = ({hotelId, pricePerNight}: Props) => {
 }
 
 export default GuestInfoForm;
+
+// TODO: users can select same date for checkIn and checkOut make that unable

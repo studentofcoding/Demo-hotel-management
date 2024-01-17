@@ -3,8 +3,25 @@ import User from "../models/user";
 import jwt from "jsonwebtoken";
 import { check } from "express-validator";
 import { validationResult } from "express-validator";
+import verifyToken from "../middleware/auth";
 
 const userRouter = express.Router();
+
+userRouter.get("/me",verifyToken, async (req: Request, res: Response) => {    //this is the endpoint of current log in user
+  const userId = req.userId;
+
+  try {
+    const user = await User.findById(userId).select("-password");   //here we are selecting all the fields except the password might be a security issue when passing to frontend
+    if (!user) {
+      return res.status(404).send({ message: "User not found(users.ts GET/me)" });
+    }
+    res.json(user);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Error fetching user(users.ts Get/me)" });
+  }
+});
 
 // /api/users/register
 userRouter.post("/register",[

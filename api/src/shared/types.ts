@@ -23,3 +23,11 @@ export type HotelType = {
       pages: number;
     };
   };
+
+  export type UserType = {      //here the same type used here is used in userSchema below it is because for keep the correct type of the data within the project
+    _id: string;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+  };

@@ -1,9 +1,19 @@
 //all the fetch requests are made here
 import { SignInFormData } from "./pages/Login";
 import { RegisterFormData } from "./pages/Register";
-import { HotelSearchResponse, HotelType } from "../../api/src/shared/types";
+import { HotelSearchResponse, HotelType, UserType } from "../../api/src/shared/types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";    //use the same service route  //here we are saying the fetch request that there is no API_BASE_URL so use the same server for all the requests
+
+export const getCurrentUser = async (): Promise<UserType> => {
+    const response = await fetch(`${API_BASE_URL}/api/users/me`,{
+        credentials:"include",  //this is used to send the cookie to the server so that the server can identify the user
+    });
+    if(!response.ok){            //here we are checking if the response is ok or not which response.ok is a boolean value pre built
+        throw new Error("Failed to fetch user(api-client.ts getCurrentUser)");
+    }
+    return response.json();      //here we are returning the response in json format
+}
 
 export const register = async (formData: RegisterFormData) => {     //here we are taking the type using RegisterFormData
     const response = await fetch(`${API_BASE_URL}/api/users/register`,{
