@@ -1,7 +1,8 @@
 //all the fetch requests are made here
 import { SignInFormData } from "./pages/Login";
 import { RegisterFormData } from "./pages/Register";
-import { HotelSearchResponse, HotelType, UserType } from "../../api/src/shared/types";
+import { HotelSearchResponse, HotelType, PaymentIntentResponse, UserType } from "../../api/src/shared/types";
+import { BookingFormData } from "./forms/BookingForm/BookingForm";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";    //use the same service route  //here we are saying the fetch request that there is no API_BASE_URL so use the same server for all the requests
 
@@ -158,8 +159,15 @@ export const searchHotels = async (searchParams:searchParams): Promise<HotelSear
     }
 
     return response.json();
-    
 }
+
+export const fetchHotels = async (): Promise<HotelType[]> => {
+    const response = await fetch(`${API_BASE_URL}/api/hotels`);
+    if (!response.ok) {
+        throw new Error("Error fetching hotels");
+    }
+    return response.json();
+};
 
 export const getHotelById = async (hotelId:string):Promise<HotelType> => {      //here we are taking the id of the hotel
     const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}`);
@@ -168,6 +176,49 @@ export const getHotelById = async (hotelId:string):Promise<HotelType> => {      
     }
     return response.json();
 }
+
+export const createPaymentIntent = async (hotelId: string, numberOfNights: string): Promise<PaymentIntentResponse> => {      //this function accepts the hotelId and numberOfNights
+    const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}/booking/payment-intent`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ numberOfNights }), // here we are passing the numberOfNights to the backend
+    });
+    if (!response.ok) {
+        throw new Error("Failed to create payment intent(api-client.ts createPaymentIntent)");
+    }
+
+    return response.json();
+};
+
+export const createRoomBooking = async (formData: BookingFormData) => {
+    const response = await fetch(`${API_BASE_URL}/api/hotels/${formData.hotelId}/booking`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+    });
+    if (!response.ok) {
+        throw new Error("Failed to create room booking(api-client.ts createRoomBooking)");
+    }
+    return response.json();
+}
+
+export const fetchMyBookings = async (): Promise<HotelType[]> => {
+    const response = await fetch(`${API_BASE_URL}/api/my-bookings`, {
+        credentials: "include",
+    });
+
+    if (!response.ok) {
+        throw new Error("Unable to fetch bookings");
+    }
+
+    return response.json();
+};
 
 
 

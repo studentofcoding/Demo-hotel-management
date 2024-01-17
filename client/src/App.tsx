@@ -9,6 +9,7 @@ import EditHotels from "./pages/EditHotels";
 import Search from "./pages/Search";
 import Details from "./pages/Details";
 import Booking from "./pages/Booking";
+import MyBookings from "./pages/MyBookings";
 
 const App = () => {
   const { isLoggedIn } = useAppContext();
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/hotel/:hotelId/booking" element={<Layout><Booking /></Layout>} />   
           <Route path="/add-hotel" element={<Layout><AddHotel /></Layout>} />
           <Route path="/my-hotels" element={<Layout><MyHotels /></Layout>} />
+          <Route path="/my-bookings" element={<Layout><MyBookings /></Layout>} />
           <Route path="/edit-hotel/:hotelId" element={<Layout><EditHotels /></Layout>} />    {/*here we are passing the hotelId from the EditHotel.tsx the useParams*/}
         </>
         )}

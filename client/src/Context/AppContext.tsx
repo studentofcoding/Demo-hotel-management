@@ -2,6 +2,9 @@ import React, { useContext } from "react";
 import Toast from "../components/Toast";
 import { useQuery } from "react-query";
 import * as apiClient from "../api-client";
+import { loadStripe,Stripe } from "@stripe/stripe-js";
+
+const  STRIPE_PUB_KEY = import.meta.env.VITE_STRIPE_PUB_KEY || "";   //here we are getting the stripe public key from the .env file
 
 type ToastMessage = {
     message: string;
@@ -10,11 +13,14 @@ type ToastMessage = {
 
 type AppContext = {
     showToast: (toastMessage: ToastMessage) => void;
-    isLoggedIn: boolean;  
+    isLoggedIn: boolean;
+    stripePromise: Promise<Stripe | null>;
 };
 
 const AppContext = React.createContext<AppContext | undefined >(undefined);  //here we are creating a context and passing the default value as undefined
-  
+
+const stripePromise = loadStripe(STRIPE_PUB_KEY);    //because we add this to AppContext the codes to loadStripe only app loads this is good because we don't need to constantly load stripe as it does bunch of api calls this prevents the performance hit   //here we are loading the stripe promise which let us connect to the stripe
+
 export const AppContextProvider = ({children}:{children: React.ReactNode}) =>{      //do all sort of hooks,states and other things  //AppContextProvider is a component which is used to wrap the components which we want to use the all the things in the context
     const [toast,setToast]=React.useState<ToastMessage | undefined>(undefined);   //here we are creating a state for the toast message and passing the default value as undefined
 
@@ -28,6 +34,7 @@ export const AppContextProvider = ({children}:{children: React.ReactNode}) =>{  
             setToast(toastMessage); 
         },
         isLoggedIn: !isError,   //here we are checking if there is any error or not and if there is no error then we are setting the isLoggedIn to true
+        stripePromise,    //here we are passing the stripe promise to the context which will expose the stripe promise to all the components to use everywhere
         }}>
             {toast && <Toast message={toast.message} type={toast.type} onClose={()=>setToast(undefined)}/>} {/*make the re-rendering*/}  {/*"onClose={()=>setToast(undefined)} an arrow function like () => setToast(undefined) denotes a function without any arguments. When this arrow function is passed as a prop, such as onClose, the empty parentheses () signify that the function doesn’t require any arguments when it's invoked."*/}
             {children} 
