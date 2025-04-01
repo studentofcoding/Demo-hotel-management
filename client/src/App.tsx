@@ -19,7 +19,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/search" element={<Layout><Search /></Layout>} />
-        <Route path="/details/:hotelId" element={<Layout><Details /></Layout>} />      {/*here we are passing the hotelId from the Details.tsx the useParams,api-client.ts getHotelById function*/}
+        <Route path="/detail/:hotelId" element={<Layout><Details /></Layout>} />      {/*here we are passing the hotelId from the Details.tsx the useParams,api-client.ts getHotelById function*/}
         <Route path="/register" element={<Layout><Register /></Layout>} />
         <Route path="/login" element={<Layout><Login /></Layout>} />
         {isLoggedIn && (
