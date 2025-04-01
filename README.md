@@ -46,6 +46,7 @@ A full-featured hotel management system where users can add hotels, search for h
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB
 - **Testing**: Playwright
+- **Payments**: Stripe
 
 ---
 
@@ -56,8 +57,8 @@ A full-featured hotel management system where users can add hotels, search for h
 #### 1️⃣ Clone the repository
 
 ```sh
-git clone https://github.com/Shyaminda/React-Hotel.git
-cd React-Hotel
+git clone https://github.com/Shyaminda/Hotel-Management-App.git
+cd Hotel-Management-App
 ```
 
 #### 2️⃣ Install dependencies
@@ -78,7 +79,7 @@ cd api && npm run dev
 cd ../client && npm run start
 ```
 
-Your application will run at [http://localhost:3000](http://localhost:3000) 🚀
+Your application will run at [http://localhost:5173](http://localhost:5173) 🚀
 
 #### Add .env files
 
