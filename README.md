@@ -94,6 +94,9 @@ CLOUDINARY_API_SECRET=
 
 #stripe 
 STRIPE_API_KEY=
+
+VITE_API_BASE_URL=http://localhost:3000
+VITE_STRIPE_PUB_KEY=
 ```
 
 ---
