@@ -80,6 +80,25 @@ cd ../client && npm run start
 
 Your application will run at [http://localhost:3000](http://localhost:3000) 🚀
 
+#### Add .env files
+
+```sh
+MONGO=
+JWT_SECRET_KEY=
+CLIENT_URL= 
+
+#cloudinary variables
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=	
+CLOUDINARY_API_SECRET=
+
+#stripe 
+STRIPE_API_KEY=
+
+VITE_API_BASE_URL=http://localhost:3000
+VITE_STRIPE_PUB_KEY=
+```
+
 ---
 
 ## 🧪 Testing
