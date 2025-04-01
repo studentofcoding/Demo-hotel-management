@@ -9,12 +9,12 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
 });
 
-userSchema.pre("save",async function(next){  //here we are using the pre function to hash the password before saving it to the database
-  if(this.isModified("password")){           //this.isModified is a function which checks if the password is modified or not
+userSchema.pre("save",async function(next){ 
+  if(this.isModified("password")){           
       this.password=await bcrypt.hash(this.password,8);
   }
   next();
-}) //this is a middleware function which is used to hash the password before saving it to the database
+}) 
 
 const User = mongoose.model<UserType>("User", userSchema);
 

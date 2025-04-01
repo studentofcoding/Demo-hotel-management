@@ -17,7 +17,7 @@ authRouter.post("/login",[
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ message: errors.array() });  //if there is any error in the validation, then it will be sent to the client side
+      return res.status(400).json({ message: errors.array() }); 
     }
     const { email, password } = req.body;
 
@@ -32,7 +32,7 @@ authRouter.post("/login",[
         return res.status(400).send({ message: "Invalid Credentials" });
       }
 
-      const token = jwt.sign(   //creating an access token  If the passwords match, it generates a JSON Web Token (JWT) using jwt.sign containing the userId from the found user. This token is signed with a secret key 
+      const token = jwt.sign(   
         {
           userId: user.id,
         },
@@ -41,7 +41,7 @@ authRouter.post("/login",[
           expiresIn: "1d",
         }
       );
-         res.cookie("auth_token", token, {      //The generated token is then set in a cookie named "auth_token" with options for HTTP-only access, secure transmission in production, and an expiration time of 24 hours 
+         res.cookie("auth_token", token, {     
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             maxAge: 86400000,
@@ -55,15 +55,15 @@ authRouter.post("/login",[
   }
 );
 
-authRouter.get("/validate-token",verifyToken,(req:Request,res:Response) => {    //this route is used to validate the token
-    res.status(200).json({message:"Token is valid",userId:req.userId});    //here we are sending the userId to the client
+authRouter.get("/validate-token",verifyToken,(req:Request,res:Response) => {    
+    res.status(200).json({message:"Token is valid",userId:req.userId});    
 });
 
 authRouter.post("/logout", (req: Request, res: Response) => {
-    res.cookie("auth_token","",{     //here empty string is passed to the cookie so that the cookie is deleted
+    res.cookie("auth_token","",{    
       expires: new Date(0),
     });
-    res.send(); //this is used to send the response without been hanging in the browser
+    res.send(); 
   });
 
 export default authRouter;
@@ -72,4 +72,3 @@ export default authRouter;
 
 
 
-//authRouter=> middleware(verifyToken)

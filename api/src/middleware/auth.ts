@@ -1,7 +1,7 @@
-import { NextFunction,Request,Response } from "express";   //NextFunction is used to call the next middleware
+import { NextFunction,Request,Response } from "express";  
 import jwt from "jsonwebtoken";
 
-declare global {      //creates a custom type for the request object
+declare global {     
     namespace Express {
       interface Request {
         userId: string;
@@ -10,13 +10,13 @@ declare global {      //creates a custom type for the request object
   }
 
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-    const token= req.cookies[ "auth_token" ];   //here we are taking the token from the cookie
+    const token= req.cookies[ "auth_token" ];   
     if(!token){
         return res.status(401).json({message:"unauthorized"});
     }
 
     try{
-        const decoded = jwt.verify(token,process.env.JWT_SECRET_KEY as string);  //here we are verifying the token
+        const decoded = jwt.verify(token,process.env.JWT_SECRET_KEY as string);  
         req.userId = (decoded as {userId:string}).userId;
         next();
     }catch(error){

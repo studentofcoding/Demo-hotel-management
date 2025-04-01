@@ -38,7 +38,7 @@ export type HotelSearchResponse = {
   };
 };
 
-export type UserType = {      //here the same type used here is used in userSchema below it is because for keep the correct type of the data within the project
+export type UserType = {     
   _id: string;
   email: string;
   password: string;

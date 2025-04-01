@@ -11,12 +11,6 @@ import hotelRouter from './routes/my-hotels';
 import searchRouter from './routes/hotels';
 import bookingRouter from './routes/my-bookings';
 
-// cloudinary.config({ 
-//     cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-//     api_key: process.env.CLOUDINARY_API_KEY, 
-//     api_secret: process.env.CLOUDINARY_API_SECRET 
-// });
-
 try {
     cloudinary.config({
         cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -37,20 +31,20 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    origin: process.env.CLIENT_URL,  //the server will only accept the request from this particular url
-    credentials: true,      //this is used to send the cookie to the server so that the server can identify the user where the security is increased
+    origin: process.env.CLIENT_URL, 
+    credentials: true,     
 }));
 
-app.use(express.static(path.join(__dirname, "../../client/dist")));   //for deployment  //make the connection to the frontend to run in the same localhost or the same server simultaneously
+app.use(express.static(path.join(__dirname, "../../client/dist")));   
 
-app.use("/api/users",userRouter);  //this route is used to register the user
-app.use("/api/auth",authRouter);  //this route is used to login the user
-app.use("/api/my-hotels",hotelRouter);  //this route is used to add a new hotel
-app.use("/api/hotels",searchRouter);  //this route is used to get all the hotels
-app.use("/api/my-bookings",bookingRouter);  //this route is used to get all the bookings of the user
+app.use("/api/users",userRouter);  
+app.use("/api/auth",authRouter);  
+app.use("/api/my-hotels",hotelRouter);  
+app.use("/api/hotels",searchRouter); 
+app.use("/api/my-bookings",bookingRouter);  
 
 app.get("*",(req:Request,res:Response) => {
-    res.sendFile(path.join(__dirname, "../../client/dist/index.html"));  //for deployment //pass on any request url that are not api endpoints the reason we are doing this is because of some our routes are behind conditional logic and wont be a part of the static files that are done above 
+    res.sendFile(path.join(__dirname, "../../client/dist/index.html"));  
 });
 
 app.listen(3000, () => {

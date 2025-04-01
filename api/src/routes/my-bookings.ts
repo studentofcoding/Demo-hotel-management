@@ -5,7 +5,6 @@ import { HotelType } from "../shared/types";
 
 const bookingRouter = express.Router();
 
-// /api/my-bookings
 bookingRouter.get("/", verifyToken, async (req: Request, res: Response) => {
     try {
     const hotels = await Hotel.find({
@@ -16,7 +15,6 @@ bookingRouter.get("/", verifyToken, async (req: Request, res: Response) => {
         const userBookings = hotel.bookings.filter(
         (booking) => booking.userId === req.userId
         );
-                //**********with this same logic we can prevent the collision of hotels dated by different users at the same date */
         const hotelWithUserBookings: HotelType = {
         ...hotel.toObject(),
         bookings: userBookings,
