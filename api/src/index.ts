@@ -1,7 +1,7 @@
 import express,{Request,Response} from 'express';
 import cors from 'cors';
 import "dotenv/config";
-import mongoose from 'mongoose';
+// MongoDB removed for Supabase migration
 import userRouter from './routes/users';
 import authRouter from './routes/auth';
 import cookieParser from 'cookie-parser';
@@ -22,18 +22,17 @@ try {
     console.log(error);
 };
 
-mongoose.connect(process.env.MONGO as string)
-.then(() => console.log('Connected to Database successfully'))
-.catch((err) => console.log(err));
+// Supabase is initialized via src/db/supabase.ts; no direct connect required
 
 const app = express();
+// Enable CORS for dev and production
+app.use(cors({
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    credentials: true,
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(cors({
-//     origin: process.env.CLIENT_URL, 
-//     credentials: true,     
-// }));
 
 app.use(express.static(path.join(__dirname, "../../client/dist")));   
 

@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
-import User from "../models/user";
+import { supabase } from "../db/supabase";
 import jwt from "jsonwebtoken";
 import verifyToken from "../middleware/auth";
 
@@ -22,7 +22,18 @@ authRouter.post("/login",[
     const { email, password } = req.body;
 
     try {
-      const user = await User.findOne({ email });
+      const { data: users, error: fetchError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .limit(1);
+
+      if (fetchError) {
+        console.log(fetchError);
+        return res.status(500).send({ message: "Error logging in" });
+      }
+
+      const user = users && users[0];
       if (!user) {
         return res.status(400).send({ message: "Invalid Credentials" });
       }
@@ -32,22 +43,19 @@ authRouter.post("/login",[
         return res.status(400).send({ message: "Invalid Credentials" });
       }
 
-      const token = jwt.sign(   
-        {
-          userId: user.id,
-        },
+      const token = jwt.sign(
+        { userId: user.id },
         process.env.JWT_SECRET_KEY as string,
-        {
-          expiresIn: "1d",
-        }
+        { expiresIn: "1d" }
       );
-         res.cookie("auth_token", token, {     
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 86400000,
-        });
 
-        res.status(200).json({ message: "Logged in successfully", userId: user.id});
+      res.cookie("auth_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 86400000,
+      });
+
+      res.status(200).json({ message: "Logged in successfully", userId: user.id });
     } catch (error) {
       console.log(error);
       res.status(500).send({ message: "Error logging in" });
