@@ -47,15 +47,23 @@ export const Login = async (formData: SignInFormData) => {    //here we are taki
     return responseBody;
 }   
 
-export const validateToken = async () => {     //validate token endpoint
+export const validateToken = async (): Promise<{ valid: boolean; userId?: string }> => {     //validate token endpoint
     const response = await fetch(`${API_BASE_URL}/api/auth/validate-token`,{
-        credentials:"include",  //this tells fetch request to send the any cookies available to the server
+        credentials:"include",  //this tells fetch request to send any cookies available to the server
     });
-    if(!response.ok){
-        throw new Error("Invalid token");
+
+    // Treat 401 (unauthorized) as "not logged in" without throwing; avoid noisy errors
+    if (response.status === 401) {
+        return { valid: false };
     }
 
-    return response.json();
+    // For other non-OK statuses, surface a generic error
+    if(!response.ok){
+        throw new Error("Unable to validate token");
+    }
+
+    const json = await response.json();
+    return { valid: true, userId: json.userId };
 };
 
 export const logOut = async () => {
